@@ -1,0 +1,45 @@
+Exp 2 
+#include <iostream> 
+#include <cstring> // Needed for strlen() 
+ 
+using namespace std; 
+ 
+int main() { 
+    char str[100]; 
+    int choice; 
+ 
+    do { 
+        cout << "\nPlease enter a string:\t"; 
+        cin.getline(str, sizeof(str)); // Safe way to read strings 
+ 
+        cout << "\nPlease choose following options:\n"; 
+        cout << "1 = Encrypt the string.\n"; 
+        cout << "2 = Decrypt the string.\n"; 
+        cin >> choice; 
+ 
+        switch(choice) { 
+            case 1: 
+                for(int i = 0; i < strlen(str); i++) { 
+                    str[i] = str[i] + 3; // The key for encryption is 3 added to ASCII value 
+                } 
+                cout << "\nEncrypted string: " << str << endl; 
+                break; 
+            case 2: 
+                for(int i = 0; i < strlen(str); i++) { 
+                    str[i] = str[i] - 3; // The key for decryption is 3 subtracted from ASCII value 
+                } 
+                cout << "\nDecrypted string: " << str << endl; 
+                break; 
+            default: 
+                cout << "\nInvalid choice\n"; 
+        } 
+ 
+        cout << "\nDo you want to continue? (1 for yes, 0 for no): "; 
+        cin >> choice; 
+        cin.ignore(); // Ignore the newline character left in the buffer 
+ 
+    } while (choice == 1); 
+ 
+    cout << "\nProgram exited.\n"; 
+    return 0; 
+}

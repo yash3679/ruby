@@ -1,0 +1,47 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+int main() {
+    std::string allLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // Create a dictionary to store the substitution for the given alphabet in the plain text based on the key
+    std::unordered_map<char, char> dict1;
+    int key = 4;
+    for (int i = 0; i < allLetters.length(); i++) {
+        dict1[allLetters[i]] = allLetters[(i + key) % allLetters.length()];
+    }
+
+    std::string plainText = "Suyash Gadekar";
+    std::string cipherText = "";
+
+    // Loop to generate ciphertext
+    for (char c : plainText) {
+        if (allLetters.find(c) != std::string::npos) {
+            cipherText += dict1[c];
+        } else {
+            cipherText += c;
+        }
+    }
+    std::cout << "Cipher Text is: " << cipherText << std::endl;
+
+    // Create a map to store the substitution for the given alphabet in the cipher text based on the key
+    std::unordered_map<char, char> dict2;
+    for (int i = 0; i < allLetters.length(); i++) {
+        dict2[allLetters[i]] = allLetters[(i - key + allLetters.length()) % allLetters.length()];
+    }
+
+    std::string decryptedText = "";
+
+    // Loop to recover plain text
+    for (char c : cipherText) {
+        if (allLetters.find(c) != std::string::npos) {
+            decryptedText += dict2[c];
+        } else {
+            decryptedText += c;
+        }
+    }
+    std::cout << "Recovered plain text: " << decryptedText << std::endl;
+
+    return 0;
+}

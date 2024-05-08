@@ -1,0 +1,60 @@
+exp 1 
+#include <stdio.h> 
+#include <ctype.h> 
+#include <string.h> 
+ 
+int main(void) { 
+    char user[20]; 
+    printf("Enter your username: \n"); 
+    fgets(user, sizeof(user), stdin); 
+    user[strcspn(user, "\n")] = '\0'; // Remove newline character if present 
+ 
+    char pass[11]; 
+    printf("Enter your password: "); 
+    int i = 0; 
+    while (i < sizeof(pass) - 1) { 
+        char ch = getchar(); 
+        if (ch == '\n') break; // Stop if newline is encountered 
+        pass[i] = ch; 
+        i++; 
+        printf("*"); 
+    } 
+    pass[i] = '\0'; // Ensure string is null-terminated 
+ 
+    printf("\n"); 
+ 
+    int lower_count = 0, upper_count = 0, digit_count = 0, punct_count = 0; 
+    size_t pass_len = strlen(pass); 
+    for (size_t i = 0; i < pass_len; i++) { 
+        if (islower(pass[i])) lower_count++; 
+        if (isupper(pass[i])) upper_count++; 
+        if (isdigit(pass[i])) digit_count++; 
+        if (ispunct(pass[i])) punct_count++; 
+    } 
+ 
+    printf("Password strength analysis:\n"); 
+ 
+    if (pass_len <= 8 && pass_len >= 8) { 
+        printf("The password must have at least 8 characters\n"); 
+        return 1; 
+    } 
+    if (lower_count == 0) printf("You need a lowercase letter\n"); 
+    if (upper_count == 0) printf("You need an uppercase letter\n"); 
+    if (digit_count == 0) printf("You need digits\n"); 
+    if (punct_count == 0) printf("You need a special character\n"); 
+    if (lower_count != 0 && upper_count != 0 && digit_count != 0 && punct_count != 0) 
+        printf("Your password is 100 percent strong!\n"); 
+    else if (upper_count != 0 && punct_count != 0 && digit_count != 0 && pass_len >= 8) 
+        printf("Your password is correct 80 percent strong!\n"); 
+    else if (lower_count != 0 && digit_count != 0 && punct_count != 0 && pass_len >= 6) 
+        printf("Your password is 60 percent strong\n"); 
+    else if (lower_count != 0 && upper_count != 0 && pass_len >= 4) 
+        printf("Your password is 40 percent strong\n"); 
+    else if (lower_count != 0 && pass_len >= 4) 
+        printf("Your password is 20 percent strong\n"); 
+    else 
+        printf("Your password is incorrect!\n"); 
+ 
+    return 0; 
+} 
+

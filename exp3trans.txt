@@ -1,0 +1,93 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <unordered_map>
+
+const std::string key = "HACK";
+std::unordered_map<char, int> keyMap;
+
+void setPermutationOrder() {
+    for (int i = 0; i < key.length(); i++) {
+        keyMap[key[i]] = i;
+    }
+}
+
+std::string encryptMessage(const std::string& msg) {
+    int row, col;
+    std::string cipher;
+    col = key.length();
+    row = (int)ceil((double)msg.length() / col);
+    char matrix[row][col];
+
+    for (int i = 0, k = 0; i < row; i++) {
+        for (int j = 0; j < col; ) {
+            if (k < msg.length()) {
+                char ch = msg[k];
+                matrix[i][j] = ch;
+                j++;
+                k++;
+            } else {
+                matrix[i][j] = '_';
+                j++;
+            }
+        }
+    }
+
+    for (auto& entry : keyMap) {
+        int columnIndex = entry.second;
+        for (int i = 0; i < row; i++) {
+            cipher += matrix[i][columnIndex];
+        }
+    }
+    return cipher;
+}
+
+std::string decryptMessage(const std::string& cipher) {
+    int col = key.length();
+    int row = (int)ceil((double)cipher.length() / col);
+    char cipherMat[row][col];
+    int k = 0;
+
+    for (int j = 0; j < col; j++) {
+        for (int i = 0; i < row; i++) {
+            cipherMat[i][j] = cipher[k];
+            k++;
+        }
+    }
+
+    int index = 0;
+    for (auto& entry : keyMap) {
+        entry.second = index++;
+    }
+
+    char decCipher[row][col];
+    for (int l = 0; l < key.length(); l++) {
+        int columnIndex = keyMap[key[l]];
+        for (int i = 0; i < row; i++) {
+            decCipher[i][l] = cipherMat[i][columnIndex];
+        }
+    }
+
+    std::string msg;
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            if (decCipher[i][j] != '_') {
+                msg += decCipher[i][j];
+            }
+        }
+    }
+    return msg;
+}
+
+int main() {
+    std::string msg = "suyash gadekar";
+
+    setPermutationOrder();
+    std::string cipher = encryptMessage(msg);
+    std::cout << "Encrypted Message: " << cipher << std::endl;
+
+    std::string decryptedMsg = decryptMessage(cipher);
+    std::cout << "Decrypted Message: " << decryptedMsg << std::endl;
+
+    return 0;
+}
